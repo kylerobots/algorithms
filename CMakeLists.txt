@@ -43,15 +43,24 @@ add_executable(cpp_version
 	src/main.cpp
 )
 
+# This is a header-only library that contains all of my implementations.
+add_library(algorithms INTERFACE)
+target_include_directories(algorithms
+	INTERFACE include
+)
+
 # This is just a simple test routine. It only checks that 1 == 1
 # and is mainly to ensure that everything is working.
-add_executable(simple_test
+add_executable(unit_tests
 	test/simple_test.cpp
+	test/test_sorting.cpp
 )
-target_link_libraries(simple_test
-	gtest_main
+target_link_libraries(unit_tests
+	PUBLIC
+		algorithms
+		gtest_main
 )
-add_test(SimpleTest simple_test)
+add_test(UnitTests unit_tests)
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
