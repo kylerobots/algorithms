@@ -1,5 +1,10 @@
 cmake_minimum_required(VERSION 3.0.0)
-project(algorithms VERSION 1.0.0)
+project(algorithms
+	VERSION 1.0.0
+	LANGUAGES CXX
+	HOMEPAGE_URL https://github.com/kylerobots/algorithms
+	DESCRIPTION "A collection of routines from Algorithms"
+)
 
 # Set up Google Test.
 # Download and unpack googletest at configure time
