@@ -11,17 +11,13 @@
  * unless otherwise noted. Future versions might expand to any
  * iterable.
  * */
-namespace Sorting
-{
-	std::vector<double> insertionSort(const std::vector<double> &input)
-	{
+namespace Sorting {
+	std::vector<double> insertionSort(const std::vector<double> & input) {
 		auto output = input;
-		for (size_t i = 1; i < output.size(); ++i)
-		{
+		for (size_t i = 1; i < output.size(); ++i) {
 			double key = output[i];
 			int j = i - 1;
-			while (j >= 0 && output[j] > key)
-			{
+			while (j >= 0 && output[j] > key) {
 				output[j + 1] = output[j];
 				j--;
 			}

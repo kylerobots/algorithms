@@ -49,8 +49,7 @@ target_include_directories(algorithms
 	INTERFACE include
 )
 
-# This is just a simple test routine. It only checks that 1 == 1
-# and is mainly to ensure that everything is working.
+# This is all of the tests for the entire algorithm library.
 add_executable(unit_tests
 	test/simple_test.cpp
 	test/test_sorting.cpp
