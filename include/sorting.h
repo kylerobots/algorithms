@@ -25,6 +25,32 @@ namespace Sorting {
 		}
 		return output;
 	}
+
+	namespace {
+		void merge(std::vector<double> & input, size_t p, size_t q, size_t r) {
+		}
+		void mergeSort(std::vector<double> & input, size_t start_index, size_t end_index) {
+		}
+	} // namespace
+
+	/**
+	 * @brief Perform sorting via merge sort.
+	 * 
+	 * This method is faster than insertion sort, but does take up
+	 * additional memory, due to the temporary arrays created.
+	 * @param input A vector of numbers in any order.
+	 * @return Those numbers sorted from smallest to largest.
+	 * */
+	std::vector<double> mergeSort(const std::vector<double> & input) {
+		auto output = input;
+		// The implementation doesn't work for empty vectors, do to underflow.
+		// So check for that case here. If the vector is empty, it is already
+		// sorted, so just return it.
+		if (input.size() >= 1) {
+			mergeSort(output, 0, input.size() - 1);
+		}
+		return output;
+	}
 } // namespace Sorting
 
 #endif // SORTING_H

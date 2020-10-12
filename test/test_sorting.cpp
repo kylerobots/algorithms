@@ -31,7 +31,7 @@ class SortFixture : public testing::TestWithParam<std::function<std::vector<doub
 // I will actually get different names on the output so I can identify where the failures are. I don't know
 // if this is a poor design or not.
 INSTANTIATE_TEST_SUITE_P(InsertionSort, SortFixture, testing::Values(Sorting::insertionSort));
-INSTANTIATE_TEST_SUITE_P(OtherSort, SortFixture, testing::Values(Sorting::insertionSort));
+INSTANTIATE_TEST_SUITE_P(MergeSort, SortFixture, testing::Values(Sorting::mergeSort));
 
 TEST_P(SortFixture, EmptyCase) {
 	std::vector<double> input;
