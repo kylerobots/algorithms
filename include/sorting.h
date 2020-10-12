@@ -1,6 +1,8 @@
 #ifndef SORTING_H
 #define SORTING_H
 
+#include <cmath>
+#include <limits>
 #include <vector>
 
 /**
@@ -28,8 +30,37 @@ namespace Sorting {
 
 	namespace {
 		void merge(std::vector<double> & input, size_t p, size_t q, size_t r) {
+			size_t size_left = q - p + 1;
+			size_t size_right = r - q;
+			std::vector<double> left;
+			std::vector<double> right;
+			for (size_t i = 0; i < size_left; ++i) {
+				left.push_back(input[p + i]);
+			}
+			for (size_t i = 1; i <= size_right; ++i) {
+				right.push_back(input[q + i]);
+			}
+			left.push_back(std::numeric_limits<double>::max());
+			right.push_back(std::numeric_limits<double>::max());
+			size_t i = 0;
+			size_t j = 0;
+			for (size_t k = p; k <= r; ++k) {
+				if (left[i] <= right[j]) {
+					input[k] = left[i];
+					i++;
+				} else {
+					input[k] = right[j];
+					j++;
+				}
+			}
 		}
 		void mergeSort(std::vector<double> & input, size_t start_index, size_t end_index) {
+			if (start_index < end_index) {
+				size_t mid_index = std::floor((start_index + end_index) / 2);
+				mergeSort(input, start_index, mid_index);
+				mergeSort(input, mid_index + 1, end_index);
+				merge(input, start_index, mid_index, end_index);
+			}
 		}
 	} // namespace
 
