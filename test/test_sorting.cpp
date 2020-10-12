@@ -51,7 +51,7 @@ TEST_P(SortFixture, Simple) {
 
 TEST_P(SortFixture, AlreadySorted) {
 	std::vector<double> input;
-	for (size_t i = -10; i < 25; i++) {
+	for (double i = -10.0; i < 25.0; i += 1.1) {
 		input.push_back(i);
 	}
 	sort(input);
@@ -59,7 +59,7 @@ TEST_P(SortFixture, AlreadySorted) {
 
 TEST_P(SortFixture, ReverseSorted) {
 	std::vector<double> input;
-	for (size_t i = 25; i > -25; i--) {
+	for (double i = 25.0; i > -25.0; i -= 0.5) {
 		input.push_back(i);
 	}
 	sort(input);
