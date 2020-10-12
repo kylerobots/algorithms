@@ -14,6 +14,15 @@
  * iterable.
  * */
 namespace Sorting {
+	/**
+	 * @brief Perform sort via insertion.
+	 * 
+	 * This is the simplist code, but also the most costly in terms of performance. It
+	 * does operate in place though, so there are only fixed memory costs.
+	 * 
+	 * @param input The unsorted array.
+	 * @return The provided array, sorted from least to greatest.
+	 * */
 	std::vector<double> insertionSort(const std::vector<double> & input) {
 		auto output = input;
 		for (size_t i = 1; i < output.size(); ++i) {
@@ -29,6 +38,17 @@ namespace Sorting {
 	}
 
 	namespace {
+		/**
+		 * @brief The helper function that performs the actual merge of mergesort.
+		 * 
+		 * This creates the two stacks, which are already in sorted order, and pops whichever
+		 * value off the top is smaller. This leads to a single array that is completely sorted.
+		 * @param input The array to sort. This will be operated on in-place.
+		 * @param p The smallest index to include in the sort.
+		 * @param q The midpoint of the sorting selection. It is assumed that and values from [p, q]
+		 * are already sorted as well as all values from [q+1, r].
+		 * @param r The largest index to include in the sort.
+		 * */
 		void merge(std::vector<double> & input, size_t p, size_t q, size_t r) {
 			size_t size_left = q - p + 1;
 			size_t size_right = r - q;
@@ -54,6 +74,17 @@ namespace Sorting {
 				}
 			}
 		}
+
+		/**
+		 * @brief A helper function for merge sort that divides the problem.
+		 * 
+		 * This method recursively divides up the array into half. Eventually, the problem is broken
+		 * down into individual elements, which are by definition sorted. This then uses @ref merge
+		 * to combine the elements back together in sorted order.
+		 * @param input The vector to operate on. This will be modified in place.
+		 * @param start_index The smallest index to consider in sorting.
+		 * @param end_index The largest index to consider in sorting.
+		 * */
 		void mergeSort(std::vector<double> & input, size_t start_index, size_t end_index) {
 			if (start_index < end_index) {
 				size_t mid_index = std::floor((start_index + end_index) / 2);
