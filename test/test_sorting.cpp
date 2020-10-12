@@ -4,37 +4,56 @@
 #include <algorithm>
 #include <limits>
 
-// A test fixture to perform the actual sorting.
-class SortFixture : public testing::Test {
+/**
+ * @brief The test fixture that allows common sort processes for all the different tests and functions.
+ * 
+ * In order to utilize different functions, this uses the parameter version. the parameters are actually the different
+ * sort functions.
+ * */
+class SortFixture : public testing::TestWithParam<std::function<std::vector<double>(const std::vector<double> &)> > {
 	protected:
+	/**
+	 * @brief Performs the sort operation.
+	 * 
+	 * This method first determines what the desired output should be. It then takes the provided input and
+	 * calls the appropriate sort function. It will then compare the two.
+	 * */
 	std::tuple<std::vector<double>, std::vector<double> > sort(const std::vector<double> & input) {
 		auto target_output = input;
 		std::sort(target_output.begin(), target_output.end());
-		auto output = Sorting::insertionSort(input);
+		auto sort_function = GetParam();
+		auto output = sort_function(input);
+		// auto output = Sorting::insertionSort(input);
 		return std::make_tuple(target_output, output);
 	}
 };
 
-TEST_F(SortFixture, EmptyCase) {
+// The specific functions to test. I can technically put them all on one line, but by doing it seperate,
+// I will actually get different names on the output so I can identify where the failures are. I don't know
+// if this is a poor design or not.
+INSTANTIATE_TEST_SUITE_P(InsertionSort, SortFixture, testing::Values(Sorting::insertionSort));
+INSTANTIATE_TEST_SUITE_P(OtherSort, SortFixture, testing::Values(Sorting::insertionSort));
+
+TEST_P(SortFixture, EmptyCase) {
 	std::vector<double> input;
 	auto results = sort(input);
 	EXPECT_EQ(std::get<0>(results), std::get<1>(results));
 }
 
-TEST_F(SortFixture, SingleElement) {
+TEST_P(SortFixture, SingleElement) {
 	std::vector<double> input;
 	input.push_back(0.0);
 	auto results = sort(input);
 	EXPECT_EQ(std::get<0>(results), std::get<1>(results));
 }
 
-TEST_F(SortFixture, Simple) {
+TEST_P(SortFixture, Simple) {
 	std::vector<double> input {1, 4.5, 3.2, 2.1};
 	auto results = sort(input);
 	EXPECT_EQ(std::get<0>(results), std::get<1>(results));
 }
 
-TEST_F(SortFixture, AlreadySorted) {
+TEST_P(SortFixture, AlreadySorted) {
 	std::vector<double> input;
 	for (size_t i = -10; i < 25; i++) {
 		input.push_back(i);
@@ -43,7 +62,7 @@ TEST_F(SortFixture, AlreadySorted) {
 	EXPECT_EQ(std::get<0>(results), std::get<1>(results));
 }
 
-TEST_F(SortFixture, ReverseSorted) {
+TEST_P(SortFixture, ReverseSorted) {
 	std::vector<double> input;
 	for (size_t i = 25; i > -25; i--) {
 		input.push_back(i);
@@ -52,7 +71,7 @@ TEST_F(SortFixture, ReverseSorted) {
 	EXPECT_EQ(std::get<0>(results), std::get<1>(results));
 }
 
-TEST_F(SortFixture, NumericalLimits) {
+TEST_P(SortFixture, NumericalLimits) {
 	std::vector<double> input;
 	input.push_back(0.0);
 	input.push_back(std::numeric_limits<double>::max());
