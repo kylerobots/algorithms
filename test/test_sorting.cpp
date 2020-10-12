@@ -18,13 +18,12 @@ class SortFixture : public testing::TestWithParam<std::function<std::vector<doub
 	 * This method first determines what the desired output should be. It then takes the provided input and
 	 * calls the appropriate sort function. It will then compare the two.
 	 * */
-	std::tuple<std::vector<double>, std::vector<double> > sort(const std::vector<double> & input) {
+	void sort(const std::vector<double> & input) {
 		auto target_output = input;
 		std::sort(target_output.begin(), target_output.end());
 		auto sort_function = GetParam();
 		auto output = sort_function(input);
-		// auto output = Sorting::insertionSort(input);
-		return std::make_tuple(target_output, output);
+		EXPECT_EQ(target_output, output);
 	}
 };
 
@@ -36,21 +35,18 @@ INSTANTIATE_TEST_SUITE_P(OtherSort, SortFixture, testing::Values(Sorting::insert
 
 TEST_P(SortFixture, EmptyCase) {
 	std::vector<double> input;
-	auto results = sort(input);
-	EXPECT_EQ(std::get<0>(results), std::get<1>(results));
+	sort(input);
 }
 
 TEST_P(SortFixture, SingleElement) {
 	std::vector<double> input;
 	input.push_back(0.0);
-	auto results = sort(input);
-	EXPECT_EQ(std::get<0>(results), std::get<1>(results));
+	sort(input);
 }
 
 TEST_P(SortFixture, Simple) {
 	std::vector<double> input {1, 4.5, 3.2, 2.1};
-	auto results = sort(input);
-	EXPECT_EQ(std::get<0>(results), std::get<1>(results));
+	sort(input);
 }
 
 TEST_P(SortFixture, AlreadySorted) {
@@ -58,8 +54,7 @@ TEST_P(SortFixture, AlreadySorted) {
 	for (size_t i = -10; i < 25; i++) {
 		input.push_back(i);
 	}
-	auto results = sort(input);
-	EXPECT_EQ(std::get<0>(results), std::get<1>(results));
+	sort(input);
 }
 
 TEST_P(SortFixture, ReverseSorted) {
@@ -67,8 +62,7 @@ TEST_P(SortFixture, ReverseSorted) {
 	for (size_t i = 25; i > -25; i--) {
 		input.push_back(i);
 	}
-	auto results = sort(input);
-	EXPECT_EQ(std::get<0>(results), std::get<1>(results));
+	sort(input);
 }
 
 TEST_P(SortFixture, NumericalLimits) {
@@ -76,6 +70,5 @@ TEST_P(SortFixture, NumericalLimits) {
 	input.push_back(0.0);
 	input.push_back(std::numeric_limits<double>::max());
 	input.push_back(std::numeric_limits<double>::min());
-	auto results = sort(input);
-	EXPECT_EQ(std::get<0>(results), std::get<1>(results));
+	sort(input);
 }
