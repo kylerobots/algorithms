@@ -37,7 +37,14 @@ namespace Sorting {
 		return output;
 	}
 
-	namespace {
+	/**
+	 * @brief This is a namespace with some under the hood functions.
+	 * 
+	 * These should generally not be called by the user unless you are
+	 * very sure what you are doing and have a very good reason for
+	 * doing so.
+	 * */
+	namespace detail {
 		/**
 		 * @brief The helper function that performs the actual merge of mergesort.
 		 * 
@@ -88,12 +95,12 @@ namespace Sorting {
 		void mergeSort(std::vector<double> & input, size_t start_index, size_t end_index) {
 			if (start_index < end_index) {
 				size_t mid_index = std::floor((start_index + end_index) / 2);
-				mergeSort(input, start_index, mid_index);
-				mergeSort(input, mid_index + 1, end_index);
-				merge(input, start_index, mid_index, end_index);
+				detail::mergeSort(input, start_index, mid_index);
+				detail::mergeSort(input, mid_index + 1, end_index);
+				detail::merge(input, start_index, mid_index, end_index);
 			}
 		}
-	} // namespace
+	} // namespace detail
 
 	/**
 	 * @brief Perform sorting via merge sort.
@@ -109,7 +116,7 @@ namespace Sorting {
 		// So check for that case here. If the vector is empty, it is already
 		// sorted, so just return it.
 		if (input.size() >= 1) {
-			mergeSort(output, 0, input.size() - 1);
+			detail::mergeSort(output, 0, input.size() - 1);
 		}
 		return output;
 	}
