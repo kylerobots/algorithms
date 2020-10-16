@@ -5,12 +5,13 @@
 #include <limits>
 
 /**
- * @brief The test fixture that allows common sort processes for all the different tests and functions.
+ * @brief The test fixture that allows common sort processes for all the sort routines that operate on any
+ * unsorted list without underlying assumptions as to the list.
  * 
  * In order to utilize different functions, this uses the parameter version. the parameters are actually the different
  * sort functions.
  * */
-class SortFixture : public testing::TestWithParam<std::function<std::vector<double>(const std::vector<double> &)> > {
+class DoubleSortFixture : public testing::TestWithParam<std::function<std::vector<double>(const std::vector<double> &)> > {
 	protected:
 	/**
 	 * @brief Performs the sort operation.
@@ -30,26 +31,26 @@ class SortFixture : public testing::TestWithParam<std::function<std::vector<doub
 // The specific functions to test. I can technically put them all on one line, but by doing it seperate,
 // I will actually get different names on the output so I can identify where the failures are. I don't know
 // if this is a poor design or not.
-INSTANTIATE_TEST_SUITE_P(InsertionSort, SortFixture, testing::Values(Sorting::insertionSort));
-INSTANTIATE_TEST_SUITE_P(MergeSort, SortFixture, testing::Values(Sorting::mergeSort));
+INSTANTIATE_TEST_SUITE_P(InsertionSort, DoubleSortFixture, testing::Values(Sorting::insertionSort));
+INSTANTIATE_TEST_SUITE_P(MergeSort, DoubleSortFixture, testing::Values(Sorting::mergeSort));
 
-TEST_P(SortFixture, EmptyCase) {
+TEST_P(DoubleSortFixture, EmptyCase) {
 	std::vector<double> input;
 	sort(input);
 }
 
-TEST_P(SortFixture, SingleElement) {
+TEST_P(DoubleSortFixture, SingleElement) {
 	std::vector<double> input;
 	input.push_back(0.0);
 	sort(input);
 }
 
-TEST_P(SortFixture, Simple) {
+TEST_P(DoubleSortFixture, Simple) {
 	std::vector<double> input {1, 4.5, 3.2, 2.1};
 	sort(input);
 }
 
-TEST_P(SortFixture, AlreadySorted) {
+TEST_P(DoubleSortFixture, AlreadySorted) {
 	std::vector<double> input;
 	for (double i = -10.0; i < 25.0; i += 1.1) {
 		input.push_back(i);
@@ -57,7 +58,7 @@ TEST_P(SortFixture, AlreadySorted) {
 	sort(input);
 }
 
-TEST_P(SortFixture, ReverseSorted) {
+TEST_P(DoubleSortFixture, ReverseSorted) {
 	std::vector<double> input;
 	for (double i = 25.0; i > -25.0; i -= 0.5) {
 		input.push_back(i);
@@ -65,7 +66,7 @@ TEST_P(SortFixture, ReverseSorted) {
 	sort(input);
 }
 
-TEST_P(SortFixture, NumericalLimits) {
+TEST_P(DoubleSortFixture, NumericalLimits) {
 	std::vector<double> input;
 	input.push_back(0.0);
 	input.push_back(std::numeric_limits<double>::max());

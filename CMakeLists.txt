@@ -51,8 +51,8 @@ target_include_directories(algorithms
 
 # This is all of the tests for the entire algorithm library.
 add_executable(unit_tests
-	test/simple_test.cpp
-	test/test_sorting.cpp
+	test/test_sanity_check.cpp
+	test/test_double_sorting.cpp
 	test/test_counting_sort.cpp
 )
 target_link_libraries(unit_tests
