@@ -62,3 +62,13 @@ TEST_F(CountingSortFixture, Uniform) {
 	}
 	sort(input);
 }
+
+TEST_F(CountingSortFixture, LargeRandom) {
+	std::vector<uint8_t> input;
+	srand(time(nullptr));
+	for (size_t i = 0; i < 1000; ++i) {
+		uint8_t number = rand() % std::numeric_limits<uint8_t>::max();
+		input.push_back(number);
+	}
+	sort(input);
+}
