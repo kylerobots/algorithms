@@ -2,16 +2,22 @@
 #define SORTING_H
 
 #include <cmath>
+#include <cstdint>
 #include <limits>
 #include <vector>
 
 /**
  * @brief A collection of sorting algorithms discussed in class.
  * 
- * This includes insertion sort, ...
- * For now, this only works on std::vector<double> for simplicity,
- * unless otherwise noted. Future versions might expand to any
- * iterable.
+ * This includes the following algorithms and the types of inputs
+ * the handle (stored within std::vector):
+ * 
+ * algorithm | input type
+ * --------- | ----------
+ * insertion | double
+ * merge     | double
+ * counting  | uint8_t
+ * 
  * */
 namespace Sorting {
 	/**
@@ -23,7 +29,7 @@ namespace Sorting {
 	 * @param input The unsorted array.
 	 * @return The provided array, sorted from least to greatest.
 	 * */
-	std::vector<double> insertionSort(const std::vector<double> & input) {
+	inline std::vector<double> insertionSort(const std::vector<double> & input) {
 		auto output = input;
 		for (size_t i = 1; i < output.size(); ++i) {
 			double key = output[i];
@@ -56,7 +62,7 @@ namespace Sorting {
 		 * are already sorted as well as all values from [q+1, r].
 		 * @param r The largest index to include in the sort.
 		 * */
-		void merge(std::vector<double> & input, size_t p, size_t q, size_t r) {
+		inline void merge(std::vector<double> & input, size_t p, size_t q, size_t r) {
 			size_t size_left = q - p + 1;
 			size_t size_right = r - q;
 			std::vector<double> left;
@@ -92,7 +98,7 @@ namespace Sorting {
 		 * @param start_index The smallest index to consider in sorting.
 		 * @param end_index The largest index to consider in sorting.
 		 * */
-		void mergeSort(std::vector<double> & input, size_t start_index, size_t end_index) {
+		inline void mergeSort(std::vector<double> & input, size_t start_index, size_t end_index) {
 			if (start_index < end_index) {
 				size_t mid_index = std::floor((start_index + end_index) / 2);
 				detail::mergeSort(input, start_index, mid_index);
@@ -110,7 +116,7 @@ namespace Sorting {
 	 * @param input A vector of numbers in any order.
 	 * @return Those numbers sorted from smallest to largest.
 	 * */
-	std::vector<double> mergeSort(const std::vector<double> & input) {
+	inline std::vector<double> mergeSort(const std::vector<double> & input) {
 		auto output = input;
 		// The implementation doesn't work for empty vectors, do to underflow.
 		// So check for that case here. If the vector is empty, it is already
@@ -118,6 +124,21 @@ namespace Sorting {
 		if (input.size() >= 1) {
 			detail::mergeSort(output, 0, input.size() - 1);
 		}
+		return output;
+	}
+
+	/**
+	 * @brief Perform sorting via counting sort.
+	 * 
+	 * This method assumes the input is all nonnegative integers. It sorts
+	 * by counting up the number of instances of each possible integer and
+	 * using that to determine where that integer should be placed within
+	 * the ouput array.
+	 * @param input A vector of unsorting integers >= 0.
+	 * @return Those numbers sorted from smallest to largest.
+	 * */
+	inline std::vector<uint8_t> countingSort(const std::vector<uint8_t> & input) {
+		auto output = input;
 		return output;
 	}
 } // namespace Sorting

@@ -53,6 +53,7 @@ target_include_directories(algorithms
 add_executable(unit_tests
 	test/simple_test.cpp
 	test/test_sorting.cpp
+	test/test_counting_sort.cpp
 )
 target_link_libraries(unit_tests
 	PUBLIC
