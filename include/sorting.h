@@ -139,6 +139,31 @@ namespace Sorting {
 	 * */
 	inline std::vector<uint8_t> countingSort(const std::vector<uint8_t> & input) {
 		auto output = input;
+		// Allocate space to count the occurances of each digit.
+		std::vector<int> value_counts(std::numeric_limits<uint8_t>::max() + 1, 0);
+		// Fill the array with counts of the occurence of each index value.
+		for (auto && i : input) {
+			value_counts[i]++;
+		}
+		// Now go through and perform summations to account for multiple instances
+		// of the same value.
+		for (size_t i = 1; i < value_counts.size(); ++i) {
+			value_counts[i] += value_counts[i - 1];
+		}
+		// Use these counts to determine where each element should go in the output
+		// array.
+		for (size_t i = input.size() - 1; i < static_cast<size_t>(-1); --i) {
+			// Determine which value is currently under consideration.
+			uint8_t current_value = input[i];
+			// Find how many elements occur before it
+			auto index_position = value_counts[current_value] - 1;
+			// Use that number of items to place it in the appropriate spot in
+			// the sorted array.
+			output[index_position] = current_value;
+			// output[value_counts[input[i]]] = input[i];
+			// Decrement each count so items don't get overwritten.
+			value_counts[current_value] -= 1;
+		}
 		return output;
 	}
 } // namespace Sorting
