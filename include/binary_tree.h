@@ -1,6 +1,8 @@
 #ifndef BINARY_TREE_H
 #define BINARY_TREE_H
 
+#include <memory>
+#include <stack>
 #include <vector>
 
 /**
@@ -12,6 +14,29 @@
  * */
 namespace BinaryTree {
 	/**
+	 * @brief This is a namespace with some under the hood functions.
+	 * 
+	 * These should generally not be called by the user unless you are
+	 * very sure what you are doing and have a very good reason for
+	 * doing so.
+	 * */
+	namespace detail {
+		/**
+		 * @param A struct for the representation of nodes in a binary tree.
+		 * */
+		struct Node {
+			/// The value stored in this node.
+			double key;
+			/// The left child of this node.
+			std::shared_ptr<Node> left;
+			/// The parent of this node.
+			std::shared_ptr<Node> parent;
+			/// The right child of this node.
+			std::shared_ptr<Node> right;
+		};
+	} // namespace detail
+
+	/**
 	 * @brief A plain binary tree.
 	 * 
 	 * This tree allows for the following functions:
@@ -22,11 +47,16 @@ namespace BinaryTree {
 	 * - Finding the successor and predecessor of a value
 	 * */
 	class BinaryTree {
+		protected:
+		/// The root of the tree.
+		std::shared_ptr<detail::Node> root;
+
 		public:
 		/**
 		 * @brief Construct an empty tree.
 		 * */
-		BinaryTree() {
+		BinaryTree() :
+				root(nullptr) {
 		}
 
 		/**
@@ -36,6 +66,24 @@ namespace BinaryTree {
 		 * */
 		std::vector<double> getSortedValues() {
 			std::vector<double> output;
+			// Use a stack to store which nodes are halfway through processing
+			std::stack<std::shared_ptr<detail::Node>> stack;
+			auto current_node = root;
+			while (current_node || !stack.empty()) {
+				// Follow down the left path of the nodes.
+				while (current_node) {
+					// If this node exists, try it's left child first
+					stack.push(current_node);
+					current_node = current_node->left;
+				}
+				// The current node is null at the top of the stacks left child.
+				current_node = stack.top();
+				stack.pop();
+				// Place this value
+				output.push_back(current_node->key);
+				// Since left is completely covered, follow right.
+				current_node = current_node->right;
+			}
 			return output;
 		}
 
@@ -44,6 +92,34 @@ namespace BinaryTree {
 		 * @param value The value to insert into the tree.
 		 * */
 		void insert(double value) {
+			std::shared_ptr<detail::Node> parent_node(nullptr);
+			auto target_node = root;
+			// Walk through the tree to find a leaf based on the
+			// order condition.
+			while (target_node) {
+				// Move to the next node down, since this isn't a leaf.
+				parent_node = target_node;
+				if (value < target_node->key) {
+					target_node = target_node->left;
+				} else {
+					target_node = target_node->right;
+				}
+			}
+			// target_node is now pointing to nullptr and parent_node is the future
+			// parent of the new value.
+			// Create a node for the new value.
+			auto new_node = std::make_shared<detail::Node>(detail::Node());
+			new_node->key = value;
+			new_node->parent = parent_node;
+			// If parent_node is nullptr, then the tree was empty, so this new value is the root.
+			// Otherwise, figure out if the new node should be a left or right node.
+			if (!parent_node) {
+				root = new_node;
+			} else if (value < parent_node->key) {
+				parent_node->left = new_node;
+			} else {
+				parent_node->right = new_node;
+			}
 		}
 
 		/**
