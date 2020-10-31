@@ -3,6 +3,7 @@
 
 #include <memory>
 #include <stack>
+#include <stdexcept>
 #include <vector>
 
 /**
