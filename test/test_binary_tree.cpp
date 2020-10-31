@@ -69,11 +69,14 @@ TEST(BinaryTree, MinMax) {
  * */
 TEST(BinaryTree, Deletion) {
 	auto numbers_and_tree = createTree();
-	// Pick an index to delete
-	size_t index = 5;
-	numbers_and_tree.second->remove(numbers_and_tree.first[index]);
 	auto expected_output = numbers_and_tree.first;
-	expected_output.erase(expected_output.begin() + index);
+	// Delete a few times to explore the different branches in the
+	// algorithm
+	std::vector<size_t> indices {5, 10, 45, 42, 50, 32, 26, 43, 89, 90, 0, 14};
+	for (size_t i = 0; i < indices.size(); ++i) {
+		numbers_and_tree.second->remove(expected_output[i]);
+		expected_output.erase(expected_output.begin() + i);
+	}
 	// Make sure the value was deleted
 	auto output = numbers_and_tree.second->getSortedValues();
 	EXPECT_EQ(expected_output, output);
