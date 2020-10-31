@@ -128,7 +128,21 @@ namespace BinaryTree {
 		 * @throw std::out_of_range Thrown if the tree is empty.
 		 * */
 		double max() {
-			return 0;
+			// Start at the root and walk right until there isn't a
+			// new right to follow.
+			auto current_node = root;
+			// There is a chance the tree is empty. If so, current_node
+			// will be null.
+			if (!current_node) {
+				throw std::out_of_range("Binary tree is empty");
+			}
+			// Otherwise, look to see if there is a child or not.
+			while (current_node->right) {
+				current_node = current_node->right;
+			}
+			// The loop exits when there is no right child, meaning the
+			// current node is the maximum.
+			return current_node->key;
 		}
 
 		/**
@@ -137,7 +151,21 @@ namespace BinaryTree {
 		 * @throw std::out_of_range Thrown if the tree is empty.
 		 * */
 		double min() {
-			return 0;
+			// Start at the root and walk left until there isn't a
+			// new left to follow.
+			auto current_node = root;
+			// There is a chance the tree is empty. If so, current_node
+			// will be null.
+			if (!current_node) {
+				throw std::out_of_range("Binary tree is empty");
+			}
+			// Otherwise, look to see if there is a child or not.
+			while (current_node->left) {
+				current_node = current_node->left;
+			}
+			// The loop exits when there is no left child, meaning the
+			// current node is the minimum.
+			return current_node->key;
 		}
 
 		/**
