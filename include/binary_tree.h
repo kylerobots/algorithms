@@ -51,6 +51,35 @@ namespace BinaryTree {
 		/// The root of the tree.
 		std::shared_ptr<detail::Node> root;
 
+		private:
+		/**
+		 * @brief Finds if a value exists within the tree.
+		 * @param value The value to search for
+		 * @return A pointer to the node containing the value.
+		 * @throw std::out_of_range Thrown if the value is not found.
+		 * */
+		std::shared_ptr<detail::Node> findValue(double value) {
+			// Find the target node by following the binary properties.
+			auto current_node = root;
+			// Search until a value is found, or the search moves past
+			// a leaf (meaning it was unsuccessful).
+			while (current_node && current_node->key != value) {
+				// Decide which way to go on the tree. Ties technically go to the right,
+				// but won't actually come up, since that would exit the loop.
+				if (value < current_node->key) {
+					current_node = current_node->left;
+				} else {
+					current_node = current_node->right;
+				}
+			}
+			// If the node is still null, then the value doesn't exist in the tree.
+			if (!current_node) {
+				throw std::out_of_range("Tree does not contain specified value");
+			}
+			// Otherwise, the current node has the target value.
+			return current_node;
+		}
+
 		public:
 		/**
 		 * @brief Construct an empty tree.
@@ -175,7 +204,36 @@ namespace BinaryTree {
 		 * @throw std::out_of_range Thrown if the value is not found or has no predecessor.
 		 * */
 		double predecessor(double value) {
-			return 0;
+			// See if the value is even in the tree. This could throw an error. Let it
+			// pass back up if it happens.
+			auto target_node = findValue(value);
+			auto predecessor_node = target_node->left;
+			// If there is a left child, the successor is the maximum of the left
+			// subtree, so keep going right.
+			if (predecessor_node) {
+				// Keep following the path to the maximum of this subtree.
+				while (predecessor_node->right) {
+					predecessor_node = predecessor_node->right;
+				}
+				// When the loop exits, there will be no left child, so the current
+				// node is the predecessor
+				return predecessor_node->key;
+			}
+			// Otherwise, the predecessor is the first ancestor that has this chain on the
+			// right child path.
+			auto parent_node = target_node->parent;
+			while (parent_node && target_node == parent_node->left) {
+				// Keep working up the tree
+				target_node = parent_node;
+				parent_node = parent_node->parent;
+			}
+			// This breaks in two cases - either the parent is not null, so the parent
+			// is the successor, or it is. If it is, this means the given value was
+			// actually the max. Throw an error then.
+			if (!parent_node) {
+				throw std::out_of_range("Value has no successor, as it is the maximum value of the tree.");
+			}
+			return parent_node->key;
 		}
 
 		/**
@@ -196,7 +254,36 @@ namespace BinaryTree {
 		 * @throw std::out_of_range Thrown if the value is not found or has no successor.
 		 * */
 		double successor(double value) {
-			return 0;
+			// See if the value is even in the tree. This could throw an error. Let it
+			// pass back up if it happens.
+			auto target_node = findValue(value);
+			auto successor_node = target_node->right;
+			// If there is a right child, the successor is the minimum of the right
+			// subtree, so keep going left.
+			if (successor_node) {
+				// Keep following the path to the minimum of this subtree.
+				while (successor_node->left) {
+					successor_node = successor_node->left;
+				}
+				// When the loop exits, there will be no left child, so the current
+				// node is the successor
+				return successor_node->key;
+			}
+			// Otherwise, the successor is the first ancestor that has this chain on the
+			// left child path.
+			auto parent_node = target_node->parent;
+			while (parent_node && target_node == parent_node->right) {
+				// Keep working up the tree
+				target_node = parent_node;
+				parent_node = parent_node->parent;
+			}
+			// This breaks in two cases - either the parent is not null, so the parent
+			// is the successor, or it is. If it is, this means the given value was
+			// actually the max. Throw an error then.
+			if (!parent_node) {
+				throw std::out_of_range("Value has no successor, as it is the maximum value of the tree.");
+			}
+			return parent_node->key;
 		}
 	};
 
