@@ -80,6 +80,28 @@ namespace BinaryTree {
 			return current_node;
 		}
 
+		/**
+		 * @brief A helper method to replace a node with one of its childer.
+		 * 
+		 * This method takes two nodes and swaps the one out for the other,
+		 * including the parent.
+		 * @param old_node The old node to replace.
+		 * @param new_node The child node to put where the old node goes.
+		 * */
+		void transplant(std::shared_ptr<detail::Node> old_node, std::shared_ptr<detail::Node> new_node) {
+			// If the old node is the root, this is an easy swap.
+			if (old_node == root) {
+				root = new_node;
+			} else if (old_node == old_node->parent->left) {
+				old_node->parent->left = new_node;
+			} else {
+				old_node->parent->right = new_node;
+			}
+			if (new_node) {
+				new_node->parent = old_node->parent;
+			}
+		}
+
 		public:
 		/**
 		 * @brief Construct an empty tree.
@@ -245,6 +267,41 @@ namespace BinaryTree {
 		 * @param value The value to delete from the tree.
 		 * */
 		void remove(double value) {
+			// First, see if the value even exists. If not, go ahead and just return,
+			// since the work is done.
+			std::shared_ptr<detail::Node> target_node;
+			try {
+				target_node = findValue(value);
+			} catch (const std::out_of_range & e) {
+				return;
+			}
+			// If the node only has one child, replace it with that child.
+			if (!target_node->left) {
+				transplant(target_node, target_node->right);
+			} else if (!target_node->right) {
+				auto left = target_node->left;
+				transplant(target_node, left);
+			} else {
+				// If the node has two children, its successor will take its
+				// place. Since it has two children, the successor is certain
+				// to be a descendant.
+				auto successor_node = findValue(successor(target_node->key));
+				// If the successor is not the immediate child, splice it out
+				// of its current location in the tree.
+				if (successor_node->parent != target_node) {
+					// By definition of being a successor, this node only has
+					// a right child (if any).
+					transplant(successor_node, successor_node->right);
+					// Move the children of the target node over to the new one
+					successor_node->right = target_node->right;
+					successor_node->right->parent = successor_node;
+				}
+				// Drop the successor in to where the target node currently resides.
+				transplant(target_node, successor_node);
+				// Replace its left child too
+				successor_node->left = target_node->left;
+				successor_node->left->parent = successor_node;
+			}
 		}
 
 		/**
