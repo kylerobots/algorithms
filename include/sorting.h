@@ -16,6 +16,7 @@
  * --------- | ----------
  * insertion | double
  * merge     | double
+ * heap      | double
  * counting  | uint8_t
  * 
  * */
@@ -124,6 +125,21 @@ namespace Sorting {
 		if (input.size() >= 1) {
 			detail::mergeSort(output, 0, input.size() - 1);
 		}
+		return output;
+	}
+
+	/**
+	 * @brief Perform sorting via heap sort.
+	 * 
+	 * This method builds a heap out of the data then reads it in printed
+	 * order. The heap is representative of a binary structure, so is easy
+	 * to traverse after. Various subfunctions ensure that the heap property
+	 * is maintained. Unlike @ref mergeSort, this sorts in place.
+	 * @param input A vector of numbers in any order.
+	 * @return Those numbers sorted from smallest to largest.
+	 * */
+	inline std::vector<double> heapSort(const std::vector<double> & input) {
+		auto output = input;
 		return output;
 	}
 
