@@ -17,6 +17,7 @@
  * insertion | double
  * merge     | double
  * heap      | double
+ * quick     | double
  * counting  | uint8_t
  * 
  * */
@@ -220,13 +221,30 @@ namespace Sorting {
 	}
 
 	/**
+	 * @brief Perform sorting via quicksort.
+	 * 
+	 * This method uses quicksort, which recursively partitions the data into
+	 * halves that are greater or less than a selected pivot value. Eventually,
+	 * the halves are small enough that they are automatically sorted. This is
+	 * the same asymptotic complexity as some oft the other algorithms, but
+	 * often performs faster. There is a randomized version that avoids the
+	 * worst case. This is not that version.
+	 * @param input A vector of unsorted numbers.
+	 * @return Those numbers sorted from smallest to largest.
+	 * */
+	inline std::vector<double> quickSort(const std::vector<double> & input) {
+		auto output = input;
+		return output;
+	}
+
+	/**
 	 * @brief Perform sorting via counting sort.
 	 * 
 	 * This method assumes the input is all nonnegative integers. It sorts
 	 * by counting up the number of instances of each possible integer and
 	 * using that to determine where that integer should be placed within
 	 * the ouput array.
-	 * @param input A vector of unsorting integers >= 0.
+	 * @param input A vector of unsorted integers >= 0.
 	 * @return Those numbers sorted from smallest to largest.
 	 * */
 	inline std::vector<uint8_t> countingSort(const std::vector<uint8_t> & input) {

@@ -34,6 +34,7 @@ class DoubleSortFixture : public testing::TestWithParam<std::function<std::vecto
 INSTANTIATE_TEST_SUITE_P(InsertionSort, DoubleSortFixture, testing::Values(Sorting::insertionSort));
 INSTANTIATE_TEST_SUITE_P(MergeSort, DoubleSortFixture, testing::Values(Sorting::mergeSort));
 INSTANTIATE_TEST_SUITE_P(HeapSort, DoubleSortFixture, testing::Values(Sorting::heapSort));
+INSTANTIATE_TEST_SUITE_P(QuickSort, DoubleSortFixture, testing::Values(Sorting::quickSort));
 
 TEST_P(DoubleSortFixture, EmptyCase) {
 	std::vector<double> input;
