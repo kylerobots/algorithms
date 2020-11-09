@@ -53,6 +53,63 @@ namespace Sorting {
 	 * */
 	namespace detail {
 		/**
+		 * @brief Converts an array to have the heap property.
+		 * 
+		 * This recursively ensures that a given vector satisfies the heap property
+		 * with the first, root element being the maximum. This is called
+		 * recursively and assumes that all elements lower than @ref lowest_index
+		 * already meet the heap property. It takes the target index and moves it
+		 * into the correct spot down the array to maintain the heap property.
+		 * @param array The array to heapify.
+		 * @param heap_size The maximum element that is considered part of the heap.
+		 * @param current_index The current index to consider. It assumes all
+		 * larger then this are already in heap order.
+		 * */
+		inline void maxHeapify(std::vector<double> & array, size_t heap_size, size_t current_index) {
+			size_t left = 2 * current_index + 1;
+			size_t right = 2 * current_index + 2;
+			size_t largest = current_index;
+			// Determine if the target value is smaller than its potential
+			// children, which violates the heap property.
+			if (left <= heap_size - 1 && array[left] > array[current_index]) {
+				largest = left;
+			}
+			if (right <= heap_size - 1 && array[right] > array[largest]) {
+				largest = right;
+			}
+			// If it is smaller, replace it with the largest child, which
+			// restores the heap property.
+			if (largest != current_index) {
+				double key = array[current_index];
+				array[current_index] = array[largest];
+				array[largest] = key;
+				// Continue down the tree to verify that the new location does
+				// not violate the heap property for one of its new children.
+				maxHeapify(array, heap_size, largest);
+			}
+		}
+
+		/**
+		 * @brief Build a heap-like array for sorting via Heap sort.
+		 * 
+		 * This puts the array in such an order that its heap property is
+		 * maintained. It does this by inserting elements and calling
+		 * @ref maxHeapify to ensure compliance with the heap property.
+		 * @param input The array to heapify.
+		 * @return The array in heap structure.
+		 * */
+		inline std::vector<double> buildMaxHeap(const std::vector<double> & input) {
+			auto result = input;
+			// The leaves are guaranteed to be in heap order, since they have
+			// no children. So skip past them for fixing the heap.
+			size_t start_index = std::floor((result.size() - 1) / 2.0);
+			for (size_t i = start_index; i != static_cast<size_t>(-1); --i) {
+				detail::maxHeapify(result, result.size(), i);
+			}
+			return result;
+		}
+
+		/**
 		 * @brief The helper function that performs the actual merge of mergesort.
 		 * 
 		 * This creates the two stacks, which are already in sorted order, and pops whichever
@@ -132,14 +189,33 @@ namespace Sorting {
 	 * @brief Perform sorting via heap sort.
 	 * 
 	 * This method builds a heap out of the data then reads it in printed
-	 * order. The heap is representative of a binary structure, so is easy
-	 * to traverse after. Various subfunctions ensure that the heap property
-	 * is maintained. Unlike @ref mergeSort, this sorts in place.
+	 * order. The heap is a max heap, meaning each element is greater than
+	 * its parents. Therefore, it is easy to traverse to get an ordered
+	 * array. Various subfunctions ensure that the heap property is maintained.
+	 * Unlike @ref mergeSort, this sorts in place.
 	 * @param input A vector of numbers in any order.
 	 * @return Those numbers sorted from smallest to largest.
 	 * */
 	inline std::vector<double> heapSort(const std::vector<double> & input) {
-		auto output = input;
+		// This won't work for empty arrays because of the comparisions, so
+		// just return if so.
+		if (input.size() < 1) {
+			return input;
+		}
+		// First, build the heap structure
+		auto output = detail::buildMaxHeap(input);
+		size_t heap_size = output.size();
+		// Since the heap is ordered with the max element in the first position,
+		// move that element to the last position and reapply the heap
+		// property. We don't need to do 0, since it will be in the
+		// right spot by default.
+		for (size_t i = heap_size - 1; i > 0; --i) {
+			double key = output[i];
+			output[i] = output[0];
+			output[0] = key;
+			heap_size--;
+			detail::maxHeapify(output, heap_size, 0);
+		}
 		return output;
 	}
 
