@@ -165,6 +165,57 @@ namespace Sorting {
 				detail::merge(input, start_index, mid_index, end_index);
 			}
 		}
+
+		/**
+		 * @brief Perform the partition operation for quick sort.
+		 * 
+		 * This function takes the last value in the supplied range and uses
+		 * it as a pivot. It then walks through the array and ensures that each
+		 * value less then the pivot is on the left and greater than on the right.
+		 * It will then put the pivot in the middle of the array.
+		 * @param input The array to partition.
+		 * @param start_index The first index to include in the partition.
+		 * @param end_index The last index to include in the partition.
+		 * @return The index around which the array is partitioned.
+		 * */
+		inline size_t quickPartition(std::vector<double> & input, int start_index, int end_index) {
+			double pivot_value = input[end_index];
+			// Track where the pivot should go
+			int pivot_index = start_index - 1;
+			for (int i = start_index; i < end_index; ++i) {
+				// Go through each element. If it is less then the pivot,
+				// it should be on the left, so increment where the pivot will
+				// ultimately be placed.
+				if (input[i] <= pivot_value) {
+					pivot_index++;
+					// Then, move the value to the last spot of the left items.
+					double key = input[pivot_index];
+					input[pivot_index] = input[i];
+					input[i] = key;
+				}
+			}
+			// Once everything is partitioned, put the pivot in the right spot.
+			double key = input[pivot_index + 1];
+			input[pivot_index + 1] = input[end_index];
+			input[end_index] = key;
+			return pivot_index + 1;
+		}
+
+		/**
+		 * @brief A helper function for the quicksort divide and conquer.
+		 * 
+		 * This part partitions each array, then calls itself for each partition.
+		 * @param input The array to sort.
+		 * @param start_index The first index to include in the sort.
+		 * @param end_index The last index to include in the sort.
+		 * @*/
+		inline void quickSort(std::vector<double> & input, int start_index, int end_index) {
+			if (start_index < end_index) {
+				int pivot_index = quickPartition(input, start_index, end_index);
+				quickSort(input, start_index, pivot_index - 1);
+				quickSort(input, pivot_index + 1, end_index);
+			}
+		}
 	} // namespace detail
 
 	/**
@@ -234,6 +285,10 @@ namespace Sorting {
 	 * */
 	inline std::vector<double> quickSort(const std::vector<double> & input) {
 		auto output = input;
+		// Watch for the empty case.
+		if (input.size() > 0) {
+			detail::quickSort(output, 0, static_cast<int>(output.size()) - 1);
+		}
 		return output;
 	}
 
