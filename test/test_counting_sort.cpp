@@ -65,7 +65,9 @@ TEST_F(CountingSortFixture, Uniform) {
 
 TEST_F(CountingSortFixture, LargeRandom) {
 	std::vector<uint8_t> input;
-	srand(time(nullptr));
+	// Since this is only used for initialization of a random generator,
+	// I don't care about potential loss of data from casting.
+	srand(static_cast<unsigned int>(time(nullptr)));
 	for (size_t i = 0; i < 1000; ++i) {
 		uint8_t number = rand() % std::numeric_limits<uint8_t>::max();
 		input.push_back(number);

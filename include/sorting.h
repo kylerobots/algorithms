@@ -35,8 +35,9 @@ namespace Sorting {
 		auto output = input;
 		for (size_t i = 1; i < output.size(); ++i) {
 			double key = output[i];
-			int j = i - 1;
-			while (j >= 0 && output[j] > key) {
+			// Since i starts at 1, j never starts less than zero.
+			size_t j = i - 1;
+			while (j != size_t(-1) && output[j] > key) {
 				output[j + 1] = output[j];
 				j--;
 			}
@@ -61,7 +62,7 @@ namespace Sorting {
 		 * recursively and assumes that all elements lower than @ref lowest_index
 		 * already meet the heap property. It takes the target index and moves it
 		 * into the correct spot down the array to maintain the heap property.
-		 * @param array The array to heapify.
+		 * @param array The array to make into a heap.
 		 * @param heap_size The maximum element that is considered part of the heap.
 		 * @param current_index The current index to consider. It assumes all
 		 * larger then this are already in heap order.
@@ -103,7 +104,9 @@ namespace Sorting {
 			auto result = input;
 			// The leaves are guaranteed to be in heap order, since they have
 			// no children. So skip past them for fixing the heap.
-			size_t start_index = std::floor((result.size() - 1) / 2.0);
+			// Since the index is always 0 or positive, casting to size_t is the
+			// same as the floor operation.
+			size_t start_index = static_cast<size_t>((result.size() - 1) / 2.0);
 			for (size_t i = start_index; i != static_cast<size_t>(-1); --i) {
 				detail::maxHeapify(result, result.size(), i);
 			}
@@ -159,7 +162,9 @@ namespace Sorting {
 		 * */
 		inline void mergeSort(std::vector<double> & input, size_t start_index, size_t end_index) {
 			if (start_index < end_index) {
-				size_t mid_index = std::floor((start_index + end_index) / 2);
+				// Since an index is always 0 or positive, casting to size_t is the same
+				// as the floor operation.
+				size_t mid_index = static_cast<size_t>((start_index + end_index) / 2);
 				detail::mergeSort(input, start_index, mid_index);
 				detail::mergeSort(input, mid_index + 1, end_index);
 				detail::merge(input, start_index, mid_index, end_index);
@@ -178,11 +183,11 @@ namespace Sorting {
 		 * @param end_index The last index to include in the partition.
 		 * @return The index around which the array is partitioned.
 		 * */
-		inline size_t quickPartition(std::vector<double> & input, int start_index, int end_index) {
+		inline size_t quickPartition(std::vector<double> & input, size_t start_index, size_t end_index) {
 			double pivot_value = input[end_index];
 			// Track where the pivot should go
-			int pivot_index = start_index - 1;
-			for (int i = start_index; i < end_index; ++i) {
+			size_t pivot_index = start_index - 1;
+			for (size_t i = start_index; i < end_index; ++i) {
 				// Go through each element. If it is less then the pivot,
 				// it should be on the left, so increment where the pivot will
 				// ultimately be placed.
@@ -209,9 +214,12 @@ namespace Sorting {
 		 * @param start_index The first index to include in the sort.
 		 * @param end_index The last index to include in the sort.
 		 * @*/
-		inline void quickSort(std::vector<double> & input, int start_index, int end_index) {
-			if (start_index < end_index) {
-				int pivot_index = quickPartition(input, start_index, end_index);
+		inline void quickSort(std::vector<double> & input, size_t start_index, size_t end_index) {
+			// Since the index is unsigned, it might roll over. This only happens to the end_index,
+			// if it was provided a pivot_index of 0 in the higher recursion. So just watch if that
+			// value is size_t::max, it is really -1.
+			if (start_index < end_index && end_index != size_t(-1)) {
+				size_t pivot_index = quickPartition(input, start_index, end_index);
 				quickSort(input, start_index, pivot_index - 1);
 				quickSort(input, pivot_index + 1, end_index);
 			}
@@ -287,7 +295,7 @@ namespace Sorting {
 		auto output = input;
 		// Watch for the empty case.
 		if (input.size() > 0) {
-			detail::quickSort(output, 0, static_cast<int>(output.size()) - 1);
+			detail::quickSort(output, 0, output.size() - 1);
 		}
 		return output;
 	}
@@ -304,9 +312,9 @@ namespace Sorting {
 	 * */
 	inline std::vector<uint8_t> countingSort(const std::vector<uint8_t> & input) {
 		auto output = input;
-		// Allocate space to count the occurances of each digit.
+		// Allocate space to count the occurrences of each digit.
 		std::vector<int> value_counts(std::numeric_limits<uint8_t>::max() + 1, 0);
-		// Fill the array with counts of the occurence of each index value.
+		// Fill the array with counts of the occurrence of each index value.
 		for (auto && i : input) {
 			value_counts[i]++;
 		}

@@ -56,8 +56,7 @@ namespace BinaryTree {
 		/**
 		 * @brief Finds if a value exists within the tree.
 		 * @param value The value to search for
-		 * @return A pointer to the node containing the value.
-		 * @throw std::out_of_range Thrown if the value is not found.
+		 * @return A pointer to the node containing the value. It is null if the value isn't found.
 		 * */
 		std::shared_ptr<detail::Node> findValue(double value) {
 			// Find the target node by following the binary properties.
@@ -73,11 +72,8 @@ namespace BinaryTree {
 					current_node = current_node->right;
 				}
 			}
-			// If the node is still null, then the value doesn't exist in the tree.
-			if (!current_node) {
-				throw std::out_of_range("Tree does not contain specified value");
-			}
-			// Otherwise, the current node has the target value.
+			// This node is either pointing at a node with a value or nullptr.
+			// Either way, go ahead and return it.
 			return current_node;
 		}
 
@@ -163,6 +159,8 @@ namespace BinaryTree {
 			auto new_node = std::make_shared<detail::Node>(detail::Node());
 			new_node->key = value;
 			new_node->parent = parent_node;
+			new_node->left = nullptr;
+			new_node->right = nullptr;
 			// If parent_node is nullptr, then the tree was empty, so this new value is the root.
 			// Otherwise, figure out if the new node should be a left or right node.
 			if (!parent_node) {
@@ -227,9 +225,11 @@ namespace BinaryTree {
 		 * @throw std::out_of_range Thrown if the value is not found or has no predecessor.
 		 * */
 		double predecessor(double value) {
-			// See if the value is even in the tree. This could throw an error. Let it
-			// pass back up if it happens.
+			// See if the value is even in the tree. Throw an error if not.
 			auto target_node = findValue(value);
+			if (!target_node) {
+				throw std::out_of_range("Value not found");
+			}
 			auto predecessor_node = target_node->left;
 			// If there is a left child, the successor is the maximum of the left
 			// subtree, so keep going right.
@@ -270,10 +270,9 @@ namespace BinaryTree {
 		void remove(double value) {
 			// First, see if the value even exists. If not, go ahead and just return,
 			// since the work is done.
-			std::shared_ptr<detail::Node> target_node;
-			try {
-				target_node = findValue(value);
-			} catch (const std::out_of_range & e) {
+			std::shared_ptr<detail::Node> target_node = findValue(value);
+			// If this is null, then the value doesn't exist and our work is done.
+			if (!target_node) {
 				return;
 			}
 			// If the node only has one child, replace it with that child.
@@ -312,9 +311,11 @@ namespace BinaryTree {
 		 * @throw std::out_of_range Thrown if the value is not found or has no successor.
 		 * */
 		double successor(double value) {
-			// See if the value is even in the tree. This could throw an error. Let it
-			// pass back up if it happens.
+			// See if the value is even in the tree. Throw an error if not
 			auto target_node = findValue(value);
+			if (!target_node) {
+				throw std::out_of_range("Value not found");
+			}
 			auto successor_node = target_node->right;
 			// If there is a right child, the successor is the minimum of the right
 			// subtree, so keep going left.
