@@ -72,6 +72,6 @@ TEST_P(DoubleSortFixture, NumericalLimits) {
 	std::vector<double> input;
 	input.push_back(0.0);
 	input.push_back(std::numeric_limits<double>::max());
-	input.push_back(std::numeric_limits<double>::min());
+	input.push_back(std::numeric_limits<double>::lowest());
 	sort(input);
 }

@@ -54,6 +54,7 @@ add_executable(unit_tests
 	test/test_binary_tree.cpp
 	test/test_counting_sort.cpp
 	test/test_double_sorting.cpp
+	test/test_max_subarray.cpp
 	test/test_sanity_check.cpp
 )
 target_link_libraries(unit_tests
