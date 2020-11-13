@@ -29,11 +29,14 @@ namespace detail {
 	 * @return A tuple with the lower and upper indices for the crossing array, as well as the
 	 * total sum.
 	 * */
-	inline std::tuple<int, int, double> findMaxCrossingArray(const std::vector<float> & input, int low, int mid, int high) {
+	inline std::tuple<size_t, size_t, double> findMaxCrossingArray(const std::vector<float> & input, size_t low, size_t mid, size_t high) {
 		double left_sum = std::numeric_limits<double>::lowest();
 		double sum = 0.0;
-		int max_left = mid;
-		for (int i = mid; i >= low; --i) {
+		size_t max_left = mid;
+		// If low is zero, this will wrap around to the max value. Since i starts at the midpoint, it
+		// will always be less than size_t::max, so the only time the comparison will be true is if
+		// the end of the iteration has truly been reached.
+		for (size_t i = mid; i >= low && i != size_t(-1); --i) {
 			sum += input[i];
 			if (sum > left_sum) {
 				left_sum = sum;
@@ -42,8 +45,8 @@ namespace detail {
 		}
 		double right_sum = std::numeric_limits<double>::lowest();
 		sum = 0.0;
-		int max_right = mid;
-		for (int i = mid + 1; i <= high; ++i) {
+		size_t max_right = mid;
+		for (size_t i = mid + 1; i <= high; ++i) {
 			sum += input[i];
 			if (sum > right_sum) {
 				right_sum = sum;
@@ -67,18 +70,20 @@ namespace detail {
 	 * @return A tuple with the lower and upper indices for the maximum array, as well as the
 	 * total sum.
 	 * */
-	inline std::tuple<int, int, double> findMaxSubarray(const std::vector<float> & input, int low, int high) {
+	inline std::tuple<size_t, size_t, double> findMaxSubarray(const std::vector<float> & input, size_t low, size_t high) {
 		// If the array is only one element, the subarray is trivial to computer.
 		if (high == low) {
 			return std::make_tuple(low, high, input[low]);
 		} else {
-			int mid = std::floor((low + high) / 2.0);
-			int left_low;
-			int left_high;
-			int right_low;
-			int right_high;
-			int cross_low;
-			int cross_high;
+			// Since indices are always positive, casting will drop the decimal, which is
+			// the equivalent of floor.
+			size_t mid = static_cast<size_t>((low + high) / 2.0);
+			size_t left_low;
+			size_t left_high;
+			size_t right_low;
+			size_t right_high;
+			size_t cross_low;
+			size_t cross_high;
 			double left_sum;
 			double right_sum;
 			double cross_sum;
@@ -108,10 +113,10 @@ namespace detail {
  * @param The array to search.
  * @return A tuple containing (starting index, ending index, sum) where sum is
  * input[ending index] - input[starting index].
- * @throw std::invalid_argument Thrown if  the provided array is less than two elements, as no
+ * @throw std::invalid_argument Thrown if the provided array is less than two elements, as no
  * difference even exists in that case.
  * */
-inline std::tuple<int, int, double> maxSubarray(const std::vector<float> & input) {
+inline std::tuple<size_t, size_t, double> maxSubarray(const std::vector<float> & input) {
 	// Verify that there are at least two elements in order to even form a difference between values.
 	if (input.size() < 2) {
 		throw std::invalid_argument("Provided array must have at least two elements.");
@@ -126,8 +131,8 @@ inline std::tuple<int, int, double> maxSubarray(const std::vector<float> & input
 	auto result = detail::findMaxSubarray(differences, 0, differences.size() - 1);
 	// These are indices for the difference array. Create the corresponding indices
 	// for the actual array.
-	int low_index = std::get<0>(result);
-	int high_index = std::get<1>(result);
+	size_t low_index = std::get<0>(result);
+	size_t high_index = std::get<1>(result);
 	double sum = std::get<2>(result);
 	return std::make_tuple(low_index, high_index + 1, sum);
 }
