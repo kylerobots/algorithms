@@ -7,7 +7,7 @@
  * */
 TEST(MaxSubarray, EmptyArray) {
 	std::vector<float> input;
-	EXPECT_THROW(maxSubarray(input), std::length_error);
+	EXPECT_THROW(maxSubarray(input), std::invalid_argument);
 }
 
 /**
@@ -16,10 +16,7 @@ TEST(MaxSubarray, EmptyArray) {
 TEST(MaxSubarray, SingleElement) {
 	std::vector<float> input;
 	input.push_back(10.0);
-	auto results = maxSubarray(input);
-	EXPECT_EQ(std::get<0>(results), 0);
-	EXPECT_EQ(std::get<1>(results), 0);
-	EXPECT_EQ(std::get<2>(results), input[0]);
+	EXPECT_THROW(maxSubarray(input), std::invalid_argument);
 }
 
 /**
@@ -30,10 +27,13 @@ TEST(MaxSubarray, Increasing) {
 	for (double i = -25.0; i <= 25.0; i += 0.3) {
 		input.push_back(i);
 	}
+	int expected_low = 0;
+	int expected_high = input.size() - 1;
+	double expected_sum = input[expected_high] - input[expected_low];
 	auto results = maxSubarray(input);
 	EXPECT_EQ(std::get<0>(results), 0);
 	EXPECT_EQ(std::get<1>(results), input.size() - 1);
-	EXPECT_EQ(std::get<2>(results), 49.8);
+	EXPECT_NEAR(std::get<2>(results), expected_sum, 0.0001);
 }
 
 /**
@@ -44,10 +44,13 @@ TEST(MaxSubarray, Decreasing) {
 	for (double i = 25.0; i >= -13.0; i -= 0.25) {
 		input.push_back(i);
 	}
+	int expected_low = 0;
+	int expected_high = 1;
+	double expected_sum = input[expected_high] - input[expected_low];
 	auto results = maxSubarray(input);
-	EXPECT_EQ(std::get<0>(results), 0);
-	EXPECT_EQ(std::get<1>(results), 0);
-	EXPECT_EQ(std::get<2>(results), input[0]);
+	EXPECT_EQ(std::get<0>(results), expected_low);
+	EXPECT_EQ(std::get<1>(results), expected_high);
+	EXPECT_NEAR(std::get<2>(results), expected_sum, 0.0001);
 }
 
 /**
