@@ -35,8 +35,9 @@ namespace Sorting {
 		auto output = input;
 		for (size_t i = 1; i < output.size(); ++i) {
 			double key = output[i];
-			int j = i - 1;
-			while (j >= 0 && output[j] > key) {
+			// Since i starts at 1, j never starts less than zero.
+			size_t j = i - 1;
+			while (j != size_t(-1) && output[j] > key) {
 				output[j + 1] = output[j];
 				j--;
 			}
@@ -103,7 +104,9 @@ namespace Sorting {
 			auto result = input;
 			// The leaves are guaranteed to be in heap order, since they have
 			// no children. So skip past them for fixing the heap.
-			size_t start_index = std::floor((result.size() - 1) / 2.0);
+			// Since the index is always 0 or positive, casting to size_t is the
+			// same as the floor operation.
+			size_t start_index = static_cast<size_t>((result.size() - 1) / 2.0);
 			for (size_t i = start_index; i != static_cast<size_t>(-1); --i) {
 				detail::maxHeapify(result, result.size(), i);
 			}
@@ -159,7 +162,9 @@ namespace Sorting {
 		 * */
 		inline void mergeSort(std::vector<double> & input, size_t start_index, size_t end_index) {
 			if (start_index < end_index) {
-				size_t mid_index = std::floor((start_index + end_index) / 2);
+				// Since an index is always 0 or positive, casting to size_t is the same
+				// as the floor operation.
+				size_t mid_index = static_cast<size_t>((start_index + end_index) / 2);
 				detail::mergeSort(input, start_index, mid_index);
 				detail::mergeSort(input, mid_index + 1, end_index);
 				detail::merge(input, start_index, mid_index, end_index);
