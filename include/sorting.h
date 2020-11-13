@@ -61,7 +61,7 @@ namespace Sorting {
 		 * recursively and assumes that all elements lower than @ref lowest_index
 		 * already meet the heap property. It takes the target index and moves it
 		 * into the correct spot down the array to maintain the heap property.
-		 * @param array The array to heapify.
+		 * @param array The array to make into a heap.
 		 * @param heap_size The maximum element that is considered part of the heap.
 		 * @param current_index The current index to consider. It assumes all
 		 * larger then this are already in heap order.
@@ -304,9 +304,9 @@ namespace Sorting {
 	 * */
 	inline std::vector<uint8_t> countingSort(const std::vector<uint8_t> & input) {
 		auto output = input;
-		// Allocate space to count the occurances of each digit.
+		// Allocate space to count the occurrences of each digit.
 		std::vector<int> value_counts(std::numeric_limits<uint8_t>::max() + 1, 0);
-		// Fill the array with counts of the occurence of each index value.
+		// Fill the array with counts of the occurrence of each index value.
 		for (auto && i : input) {
 			value_counts[i]++;
 		}
