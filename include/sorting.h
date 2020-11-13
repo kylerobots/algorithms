@@ -183,11 +183,11 @@ namespace Sorting {
 		 * @param end_index The last index to include in the partition.
 		 * @return The index around which the array is partitioned.
 		 * */
-		inline size_t quickPartition(std::vector<double> & input, int start_index, int end_index) {
+		inline size_t quickPartition(std::vector<double> & input, size_t start_index, size_t end_index) {
 			double pivot_value = input[end_index];
 			// Track where the pivot should go
-			int pivot_index = start_index - 1;
-			for (int i = start_index; i < end_index; ++i) {
+			size_t pivot_index = start_index - 1;
+			for (size_t i = start_index; i < end_index; ++i) {
 				// Go through each element. If it is less then the pivot,
 				// it should be on the left, so increment where the pivot will
 				// ultimately be placed.
@@ -214,9 +214,12 @@ namespace Sorting {
 		 * @param start_index The first index to include in the sort.
 		 * @param end_index The last index to include in the sort.
 		 * @*/
-		inline void quickSort(std::vector<double> & input, int start_index, int end_index) {
-			if (start_index < end_index) {
-				int pivot_index = quickPartition(input, start_index, end_index);
+		inline void quickSort(std::vector<double> & input, size_t start_index, size_t end_index) {
+			// Since the index is unsigned, it might roll over. This only happens to the end_index,
+			// if it was provided a pivot_index of 0 in the higher recursion. So just watch if that
+			// value is size_t::max, it is really -1.
+			if (start_index < end_index && end_index != size_t(-1)) {
+				size_t pivot_index = quickPartition(input, start_index, end_index);
 				quickSort(input, start_index, pivot_index - 1);
 				quickSort(input, pivot_index + 1, end_index);
 			}
@@ -292,7 +295,7 @@ namespace Sorting {
 		auto output = input;
 		// Watch for the empty case.
 		if (input.size() > 0) {
-			detail::quickSort(output, 0, static_cast<int>(output.size()) - 1);
+			detail::quickSort(output, 0, output.size() - 1);
 		}
 		return output;
 	}
