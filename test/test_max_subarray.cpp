@@ -24,11 +24,11 @@ TEST(MaxSubarray, SingleElement) {
  * */
 TEST(MaxSubarray, Increasing) {
 	std::vector<float> input;
-	for (double i = -25.0; i <= 25.0; i += 0.3) {
+	for (float i = -25.0; i <= 25.0; i += (float)0.3) {
 		input.push_back(i);
 	}
 	int expected_low = 0;
-	int expected_high = input.size() - 1;
+	int expected_high = static_cast<int>(input.size()) - 1;
 	double expected_sum = input[expected_high] - input[expected_low];
 	auto results = maxSubarray(input);
 	EXPECT_EQ(std::get<0>(results), 0);
@@ -41,7 +41,7 @@ TEST(MaxSubarray, Increasing) {
  * */
 TEST(MaxSubarray, Decreasing) {
 	std::vector<float> input;
-	for (double i = 25.0; i >= -13.0; i -= 0.25) {
+	for (float i = 25.0; i >= -13.0; i -= (float)0.25) {
 		input.push_back(i);
 	}
 	int expected_low = 0;
