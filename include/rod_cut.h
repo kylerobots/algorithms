@@ -17,6 +17,49 @@
  * */
 namespace RodCut {
 	/**
+	 * @brief This is a namespace with some under the hood functions.
+	 * 
+	 * These should generally not be called by the user unless you are
+	 * very sure what you are doing and have a very good reason for
+	 * doing so.
+	 * */
+	namespace detail {
+		/**
+		 * @brief Performs the actual top down memoization.
+		 * 
+		 * This is just a recursive call that calls each sub solution
+		 * if it doesn't already have a value computed.
+		 * @param length The length to find a solution for.
+		 * @param prices The prices for each length.
+		 * @param solutions The vector of solutions for each length.
+		 * @return The best prices for a rod of length @ref length.
+		 * */
+		inline double memoizedCutRod(unsigned int length, const std::map<unsigned int, double> & prices, std::vector<double> solutions) {
+			// Return a value if it has already been computed.
+			if (solutions[length] >= 0) {
+				return solutions[length];
+			}
+			double best_price;
+			// We know a length of 0 has a price of 0.0.
+			if (length == 0) {
+				best_price = 0.0;
+			} else {
+				best_price = std::numeric_limits<double>::lowest();
+				// Recursively calculate the optimal solution for this
+				// length by picking the first cut and computing the
+				// optimal solution for the remaining length.
+				for (unsigned int i = 1; i <= length; ++i) {
+					double candidate_price = prices.at(i) + memoizedCutRod(length - i, prices, solutions);
+					best_price = std::max(best_price, candidate_price);
+				}
+			}
+			// Store this price for future lookup.
+			solutions[length] = best_price;
+			return best_price;
+		}
+	} // namespace detail
+
+	/**
 	 * @brief Calculate the optimal cut pattern for a rod with bottom-up
 	 * calculations.
 	 * 
@@ -61,8 +104,8 @@ namespace RodCut {
 	 * @return The best price that can be obtained.
 	 * */
 	inline double bestRodCutTopDown(unsigned int length, std::map<unsigned int, double> prices) {
-		double best_price = 0.0;
-		return best_price;
+		std::vector<double> solutions(length + 1, std::numeric_limits<double>::lowest());
+		return detail::memoizedCutRod(length, prices, solutions);
 	}
 } // namespace RodCut
 
