@@ -81,10 +81,10 @@ namespace RodCut {
 			// first cuts plus the optimal solution of the remaining length.
 			// Since this is bottom up, the remaining length solutions have
 			// already been computed.
-			for (size_t j = 1; j <= i; ++j) {
+			for (unsigned int j = 1; j <= i; ++j) {
 				// Prices[j] represents the price for the first cut. Solutions[i-j]
 				// is then the ideal price for the remaining length.
-				best_price = std::max(best_price, prices[j] + solutions[i - j]);
+				best_price = std::max(best_price, prices.at(j) + solutions[i - j]);
 			}
 			// Store the best price for this length for use by higher solutions.
 			solutions[i] = best_price;
