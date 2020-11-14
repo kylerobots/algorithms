@@ -39,7 +39,7 @@ std::pair<std::vector<double>, std::shared_ptr<BinaryTree::BinaryTree>> createTr
  * 
  * This verifies that the tree can insert numbers properly and
  * traverse the tree correctly. If done right, it will return
- * an ordered list. I don't know how to seperate this function
+ * an ordered list. I don't know how to separate this function
  * without using friend classes to directly access the nodes.
  * */
 TEST(BinaryTree, Insertion) {
