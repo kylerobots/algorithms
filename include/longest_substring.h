@@ -97,7 +97,7 @@ namespace detail {
 	 * @param length1 The length of the substring solution for @ref string1.
 	 * @param length2 The length of the substring solution for the other string.
 	 * */
-	inline std::string printLCS(const Directions & direction, const std::string & string1, unsigned int length1, unsigned int length2) {
+	inline std::string printLCS(const Directions & direction, const std::string & string1, size_t length1, size_t length2) {
 		if (length1 == 0 || length2 == 0) {
 			return "";
 		}
