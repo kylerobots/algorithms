@@ -1,4 +1,4 @@
-#include "longest_sequence.h"
+#include "longest_substring.h"
 
 #include "gtest/gtest.h"
 
@@ -6,11 +6,11 @@
  * @brief Test empty strings.
  * */
 TEST(LCS, Empty) {
-	auto result = findLongestCommonSubsequence("", "");
+	auto result = findLongestCommonSubstring("", "");
 	EXPECT_EQ(result, "");
-	result = findLongestCommonSubsequence("1234", "");
+	result = findLongestCommonSubstring("1234", "");
 	EXPECT_EQ(result, "");
-	result = findLongestCommonSubsequence("", "abcd");
+	result = findLongestCommonSubstring("", "abcd");
 	EXPECT_EQ(result, "");
 }
 
@@ -18,7 +18,7 @@ TEST(LCS, Empty) {
  * @brief Test if no common characters.
  * */
 TEST(LCS, NoMatch) {
-	auto result = findLongestCommonSubsequence("abcd", "1234");
+	auto result = findLongestCommonSubstring("abcd", "1234");
 	EXPECT_EQ(result, "");
 }
 
@@ -26,7 +26,7 @@ TEST(LCS, NoMatch) {
  * @brief Test simple case.
  * */
 TEST(LCS, Simple) {
-	auto result = findLongestCommonSubsequence("ABCBDAB", "BDCABA");
+	auto result = findLongestCommonSubstring("ABCBDAB", "BDCABA");
 	EXPECT_EQ(result, "BCBA");
 }
 
@@ -34,6 +34,6 @@ TEST(LCS, Simple) {
  * @brief Test if one string is a complete substring of another.
  * */
 TEST(LCS, CompleteSubstring) {
-	auto result = findLongestCommonSubsequence("BAT", "BATTER");
+	auto result = findLongestCommonSubstring("BAT", "BATTER");
 	EXPECT_EQ(result, "BAT");
 }

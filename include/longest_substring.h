@@ -1,16 +1,16 @@
-#ifndef LONGEST_SEQUENCE_H
-#define LONGEST_SEQUENCE_H
+#ifndef LONGEST_SUBSTRING_H
+#define LONGEST_SUBSTRING_H
 
 #include <string>
 #include <vector>
 
 /**
-	 * @brief This is a namespace with some under the hood functions.
-	 * 
-	 * These should generally not be called by the user unless you are
-	 * very sure what you are doing and have a very good reason for
-	 * doing so.
-	 * */
+ * @brief This is a namespace with some under the hood functions.
+ * 
+ * These should generally not be called by the user unless you are
+ * very sure what you are doing and have a very good reason for
+ * doing so.
+ * */
 namespace detail {
 	/**
 	 * @brief A representation of the directions stored in the table.
@@ -117,7 +117,7 @@ namespace detail {
 } // namespace detail
 
 /**
- * @brief Find the longest common subsequence between two strings.
+ * @brief Find the longest common substring between two strings.
  * 
  * This uses bottom up dynamic programming to find the longest
  * common substring between two strings. It creates a match table
@@ -129,7 +129,7 @@ namespace detail {
  * @param string2 The second string to compare.
  * @return The longest common substring.
  * */
-inline std::string findLongestCommonSubsequence(const std::string & string1, const std::string & string2) {
+inline std::string findLongestCommonSubstring(const std::string & string1, const std::string & string2) {
 	// If either string is empty, then the longest substring is an empty string.
 	if (string1.empty() || string2.empty()) {
 		return "";
@@ -141,4 +141,4 @@ inline std::string findLongestCommonSubsequence(const std::string & string1, con
 	return result;
 }
 
-#endif // LONGEST_SEQUENCE_H
+#endif // LONGEST_SUBSTRING_H
