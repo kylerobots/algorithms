@@ -81,7 +81,7 @@ TEST_F(BucketSortFixture, Uniform) {
  * */
 TEST_F(BucketSortFixture, OOBLower) {
 	std::vector<double> input {-5.0, -6.0, 0.5};
-	sort(input);
+	EXPECT_THROW(Sorting::bucketSort(input), std::out_of_range);
 }
 
 /**
@@ -89,5 +89,5 @@ TEST_F(BucketSortFixture, OOBLower) {
  * */
 TEST_F(BucketSortFixture, OOBUpper) {
 	std::vector<double> input {1.0, 0.25};
-	sort(input);
+	EXPECT_THROW(Sorting::bucketSort(input), std::out_of_range);
 }
