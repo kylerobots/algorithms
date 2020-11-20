@@ -52,6 +52,7 @@ target_include_directories(algorithms
 # This is all of the tests for the entire algorithm library.
 add_executable(unit_tests
 	test/test_binary_tree.cpp
+	test/test_bucket_sort.cpp
 	test/test_counting_sort.cpp
 	test/test_double_sorting.cpp
 	test/test_longest_substring.cpp

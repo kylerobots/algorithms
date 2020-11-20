@@ -4,6 +4,7 @@
 #include <cmath>
 #include <cstdint>
 #include <limits>
+#include <stdexcept>
 #include <vector>
 
 /**
@@ -20,6 +21,7 @@
  * quick     | double
  * counting  | uint8_t
  * radix     | unsigned int
+ * bucket    | double in the range [0, 1)
  * 
  * */
 namespace Sorting {
@@ -416,6 +418,51 @@ namespace Sorting {
 		unsigned int max_digit = static_cast<unsigned int>(std::floor(std::log10(max)));
 		for (unsigned int i = 0; i <= max_digit; ++i) {
 			output = detail::radixCountSort(output, i);
+		}
+		return output;
+	}
+
+	/**
+	 * @brief Perform sorting via bucket sort.
+	 * 
+	 * This algorithm divides the valid range for the sort into n uniform buckets. It then
+	 * places each number into the appropriate bucket. These buckets are then sorted via
+	 * insertion sort. The buckets are then reassembled. Because the buckets contain only
+	 * a few items, the insertion sort is fast.
+	 * 
+	 * @note This can be expanded to any nonnegative value by normalizing the values when
+	 * placing into buckets. However, this will stick with the method shown in the book.
+	 * 
+	 * @param input A vector of unsorted numbers in the range [0, 1).
+	 * @return Those numbers sorted from smallest to largest.
+	 * @throw std::out_of_range Thrown if a number is outside the range [0, 1)
+	 * */
+	inline std::vector<double> bucketSort(const std::vector<double> & input) {
+		// Create each bucket
+		std::vector<std::vector<double>> buckets(input.size(), std::vector<double>());
+		// Place each number into a bucket. Since numbers are on the range [0, 1),
+		// multiplying by the total count of numbers ensures the floor yields the index
+		// that number should be placed in. This is because the number of buckets is
+		// also based on the total count of numbers. For example, consider 4 numbers.
+		// The second bucket is the range [0.25, 0.5). So floor(4 * 0.3) = 1, which is
+		// the right index.
+		for (auto && i : input) {
+			// Check that the value is in the correct range.
+			if (i >= 1.0 || i < 0.0) {
+				throw std::out_of_range("Keys must be in the range [0, )");
+			}
+			// Floor ensures the result is an integer, so is safe to cast.
+			size_t index = static_cast<size_t>(std::floor(input.size() * i));
+			buckets[index].push_back(i);
+		}
+		// Now sort each bucket using insertion sort. Although any sort would work.
+		// As the results are returned, place them in the output array.
+		std::vector<double> output;
+		for (auto && bucket : buckets) {
+			auto sorted_bucket = insertionSort(bucket);
+			for (auto && value : sorted_bucket) {
+				output.push_back(value);
+			}
 		}
 		return output;
 	}
