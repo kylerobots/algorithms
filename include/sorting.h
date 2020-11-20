@@ -20,6 +20,7 @@
  * quick     | double
  * counting  | uint8_t
  * radix     | unsigned int
+ * bucket    | double in the range [0, 1)
  * 
  * */
 namespace Sorting {
@@ -417,6 +418,23 @@ namespace Sorting {
 		for (unsigned int i = 0; i <= max_digit; ++i) {
 			output = detail::radixCountSort(output, i);
 		}
+		return output;
+	}
+
+	/**
+	 * @brief Perform sorting via bucket sort.
+	 * 
+	 * This algorithm divides the valid range for the sort into n uniform buckets. It then
+	 * places each number into the appropriate bucket. These buckets are then sorted via
+	 * insertion sort. The buckets are then reassembled. Because the buckets contain only
+	 * a few items, the insertion sort is fast.
+	 * 
+	 * @param input A vector of unsorted numbers in the range [0, 1).
+	 * @return Those numbers sorted from smallest to largest.
+	 * @throw std::out_of_range Thrown if a number is outside the range [0, 1)
+	 * */
+	inline std::vector<double> bucketSort(const std::vector<double> & input) {
+		auto output = input;
 		return output;
 	}
 } // namespace Sorting
