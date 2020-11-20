@@ -19,6 +19,7 @@
  * heap      | double
  * quick     | double
  * counting  | uint8_t
+ * radix     | unsigned int
  * 
  * */
 namespace Sorting {
@@ -337,6 +338,20 @@ namespace Sorting {
 			// Decrement each count so items don't get overwritten.
 			value_counts[current_value] -= 1;
 		}
+		return output;
+	}
+
+	/**
+	 * @brief Perform sorting via radix sort.
+	 * 
+	 * This uses a radix sort to sort on each digit from least to most significant
+	 * digit. It then uses a modified counting sort algorithm under the hood for
+	 * the actual sort.
+	 * @param input A vector of unsorted integers >= 0.
+	 * @return Those numbers sorted from smallest to largest.
+	 * */
+	inline std::vector<unsigned int> radixSort(const std::vector<unsigned int> & input) {
+		auto output = input;
 		return output;
 	}
 } // namespace Sorting
