@@ -225,6 +225,54 @@ namespace Sorting {
 				quickSort(input, pivot_index + 1, end_index);
 			}
 		}
+
+		/**
+		 * @brief A modified counting sort that operates on a single digit for each number.
+		 * 
+		 * This uses the same algorithm as @ref countingSort, but only compares a single digit
+		 * for each number, rather than the whole number. Because of that, it only needs to
+		 * allocate 10 spaces for the count.
+		 * @param input The vector to sort.
+		 * @param digit The digit index to sort on. 0 = ones place, 1 = tens place, etc.
+		 * @return The array sorted on the select digit.
+		 * */
+		inline std::vector<unsigned int> radixCountSort(const std::vector<unsigned int> & input, unsigned int digit) {
+			auto output = input;
+			// Allocate space to count the occurrence of each digit. There is at most
+			// 10 numbers to consider.
+			std::vector<unsigned int> value_counts(10, 0);
+			// Count the occurrence of each digit.
+			for (auto && i : input) {
+				// The digit under consideration is found by:
+				// value = (number / 10^digit) % 10
+				// The parenthesis moves the target digit to the ones place. The modulus
+				// then determines the remainder to figure out what this digit is. Since
+				// we are looking for an integer anyways, don't worry about truncating
+				// from rounding.
+				unsigned int value = static_cast<unsigned int>((i / std::pow(10, digit))) % 10;
+				value_counts[value]++;
+			}
+			// Now go through and perform summations to account for multiple instances
+			// of the same value.
+			for (size_t i = 1; i < value_counts.size(); ++i) {
+				value_counts[i] += value_counts[i - 1];
+			}
+			// Use these counts to determine where each element should go in the output
+			// array.
+			for (size_t i = input.size() - 1; i < static_cast<size_t>(-1); --i) {
+				// Determine which value is currently under consideration.
+				unsigned int current_value = static_cast<unsigned int>((input[i] / std::pow(10, digit))) % 10;
+				// Find how many elements occur before it
+				auto index_position = value_counts[current_value] - 1;
+				// Use that number of items to place it in the appropriate spot in
+				// the sorted array.
+				output[index_position] = input[i];
+				// output[value_counts[input[i]]] = input[i];
+				// Decrement each count so items don't get overwritten.
+				value_counts[current_value] -= 1;
+			}
+			return output;
+		}
 	} // namespace detail
 
 	/**
@@ -352,6 +400,22 @@ namespace Sorting {
 	 * */
 	inline std::vector<unsigned int> radixSort(const std::vector<unsigned int> & input) {
 		auto output = input;
+		// Watch for empty arrays, since they won't sort correctly.
+		if (input.size() == 0) {
+			return output;
+		}
+		// Determine the max number to determine which digit to iterate up to.
+		unsigned int max = 0;
+		for (auto && number : input) {
+			max = std::max(max, number);
+		}
+		// The floor of log10 determines the index, since we are starting from 0. Since
+		// log10(10) = 1, anything less (AKA 1 digit) will be 0. Then anytime a new digit
+		// is added to the number, the result of log10 will also increase one.
+		unsigned int max_digit = std::floor(std::log10(max));
+		for (unsigned int i = 0; i <= max_digit; ++i) {
+			output = detail::radixCountSort(output, i);
+		}
 		return output;
 	}
 } // namespace Sorting
