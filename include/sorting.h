@@ -411,8 +411,9 @@ namespace Sorting {
 		}
 		// The floor of log10 determines the index, since we are starting from 0. Since
 		// log10(10) = 1, anything less (AKA 1 digit) will be 0. Then anytime a new digit
-		// is added to the number, the result of log10 will also increase one.
-		unsigned int max_digit = std::floor(std::log10(max));
+		// is added to the number, the result of log10 will also increase one. Because of
+		// the floor, casting to int won't lose any data.
+		unsigned int max_digit = static_cast<unsigned int>(std::floor(std::log10(max)));
 		for (unsigned int i = 0; i <= max_digit; ++i) {
 			output = detail::radixCountSort(output, i);
 		}
