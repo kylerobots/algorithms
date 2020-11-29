@@ -58,6 +58,7 @@ add_executable(unit_tests
 	test/test_longest_substring.cpp
 	test/test_max_subarray.cpp
 	test/test_radix_sort.cpp
+	test/test_red_black_tree.cpp
 	test/test_rod_cut.cpp
 	test/test_sanity_check.cpp
 )

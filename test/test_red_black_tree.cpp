@@ -1,4 +1,4 @@
-#include "binary_tree.h"
+#include "red_black_tree.h"
 
 #include "gtest/gtest.h"
 #include <algorithm>
@@ -16,13 +16,13 @@
  * vector is in sorted order.
  * to the tree.
  * */
-std::pair<std::vector<double>, std::shared_ptr<BinaryTree::BinaryTree>> createBinaryTree() {
+std::pair<std::vector<double>, std::shared_ptr<BinaryTree::RedBlackTree>> createRedBlackTree() {
 	// Use a random number generator for the insert
 	// values, but give it a fixed seed for consistency.
 	std::mt19937 engine(42);
 	std::uniform_real_distribution<double> distribution(-100.0, 100.0);
 	// Create a pair to return both values.
-	auto results = std::make_pair(std::vector<double>(), std::make_shared<BinaryTree::BinaryTree>());
+	auto results = std::make_pair(std::vector<double>(), std::make_shared<BinaryTree::RedBlackTree>());
 	// Add a bunch of numbers into the tree.
 	for (size_t i = 0; i < 100; ++i) {
 		double number = distribution(engine);
@@ -42,8 +42,8 @@ std::pair<std::vector<double>, std::shared_ptr<BinaryTree::BinaryTree>> createBi
  * an ordered list. I don't know how to separate this function
  * without using friend classes to directly access the nodes.
  * */
-TEST(BinaryTree, Insertion) {
-	auto numbers_and_tree = createBinaryTree();
+TEST(RedBlackTree, Insertion) {
+	auto numbers_and_tree = createRedBlackTree();
 	// Get the numbers from a tree walk.
 	std::vector<double> output = numbers_and_tree.second->getSortedValues();
 	EXPECT_EQ(numbers_and_tree.first, output);
@@ -52,8 +52,8 @@ TEST(BinaryTree, Insertion) {
 /**
  * @brief Test the ability to find the minimum and maximum values.
  * */
-TEST(BinaryTree, MinMax) {
-	auto numbers_and_tree = createBinaryTree();
+TEST(RedBlackTree, MinMax) {
+	auto numbers_and_tree = createRedBlackTree();
 	double min = numbers_and_tree.second->min();
 	double max = numbers_and_tree.second->max();
 	// Since the numbers are sorted, just compare to the first and last element.
@@ -67,8 +67,8 @@ TEST(BinaryTree, MinMax) {
  * This deletes a number from the tree and then checks that it
  * was actually deleted by comparing with the traversal output.
  * */
-TEST(BinaryTree, Deletion) {
-	auto numbers_and_tree = createBinaryTree();
+TEST(RedBlackTree, Deletion) {
+	auto numbers_and_tree = createRedBlackTree();
 	auto expected_output = numbers_and_tree.first;
 	// Delete a few times to explore the different branches in the
 	// algorithm
@@ -88,8 +88,8 @@ TEST(BinaryTree, Deletion) {
  * This checks that the tree can find the predecessor and successor
  * of a given value.
  * */
-TEST(BinaryTree, SuccessorPredecessor) {
-	auto numbers_and_tree = createBinaryTree();
+TEST(RedBlackTree, SuccessorPredecessor) {
+	auto numbers_and_tree = createRedBlackTree();
 	// Pick an index to use.
 	size_t index = 20;
 	double predecessor = numbers_and_tree.second->predecessor(numbers_and_tree.first[index]);
@@ -113,8 +113,8 @@ TEST(BinaryTree, SuccessorPredecessor) {
  * - Deletion ends without error
  * - Predecessor, successor, min, and max all throw errors
  * */
-TEST(BinaryTree, Empty) {
-	BinaryTree::BinaryTree tree;
+TEST(RedBlackTree, Empty) {
+	BinaryTree::RedBlackTree tree;
 	EXPECT_NO_FATAL_FAILURE(tree.remove(0.0));
 	EXPECT_THROW(tree.max(), std::out_of_range);
 	EXPECT_THROW(tree.min(), std::out_of_range);
