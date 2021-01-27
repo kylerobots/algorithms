@@ -16,6 +16,7 @@ class RadixSortFixture : public ::testing::Test {
 	 * 
 	 * This method first determines what the desired output should be. It
 	 * then calls the sort function and compares the result.
+	 * @param input The vector to sort.
 	 * */
 	void sort(const std::vector<unsigned int> & input) {
 		auto target_output = input;

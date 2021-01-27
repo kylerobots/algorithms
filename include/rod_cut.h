@@ -32,7 +32,7 @@ namespace RodCut {
 		 * @param length The length to find a solution for.
 		 * @param prices The prices for each length.
 		 * @param solutions The vector of solutions for each length.
-		 * @return The best prices for a rod of length @ref length.
+		 * @return The best prices for a rod of length length.
 		 * */
 		inline double memoizedCutRod(unsigned int length, const std::map<unsigned int, double> & prices, std::vector<double> solutions) {
 			// Return a value if it has already been computed.

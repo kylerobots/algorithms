@@ -62,7 +62,7 @@ namespace Sorting {
 		 * 
 		 * This recursively ensures that a given vector satisfies the heap property
 		 * with the first, root element being the maximum. This is called
-		 * recursively and assumes that all elements lower than @ref lowest_index
+		 * recursively and assumes that all elements lower than lowest_index
 		 * already meet the heap property. It takes the target index and moves it
 		 * into the correct spot down the array to maintain the heap property.
 		 * @param array The array to make into a heap.
