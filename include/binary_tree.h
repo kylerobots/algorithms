@@ -220,7 +220,7 @@ namespace BinaryTree {
 
 		/**
 		 * @brief Find the previous element in the tree, given a value.
-		 * @param Value The value to find the predecessor of.
+		 * @param value The value to find the predecessor of.
 		 * @return The predecessor of the provided value.
 		 * @throw std::out_of_range Thrown if the value is not found or has no predecessor.
 		 * */
@@ -306,7 +306,7 @@ namespace BinaryTree {
 
 		/**
 		 * @brief Find the next element in the tree, given a value.
-		 * @param Value The value to find the successor of.
+		 * @param value The value to find the successor of.
 		 * @return The successor of the provided value.
 		 * @throw std::out_of_range Thrown if the value is not found or has no successor.
 		 * */

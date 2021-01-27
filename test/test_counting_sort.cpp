@@ -15,6 +15,7 @@ class CountingSortFixture : public ::testing::Test {
 	 * 
 	 * This method first determines what the desired output should be. It
 	 * then calls the sort function and compares the result.
+	 * @param input The vector of numbers to sort.
 	 * */
 	void sort(const std::vector<uint8_t> & input) {
 		auto target_output = input;

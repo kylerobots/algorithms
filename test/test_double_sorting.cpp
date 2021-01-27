@@ -18,6 +18,7 @@ class DoubleSortFixture : public testing::TestWithParam<std::function<std::vecto
 	 * 
 	 * This method first determines what the desired output should be. It then takes the provided input and
 	 * calls the appropriate sort function. It will then compare the two.
+	 * @param input The vector to sort.
 	 * */
 	void sort(const std::vector<double> & input) {
 		auto target_output = input;

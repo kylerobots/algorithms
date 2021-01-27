@@ -16,7 +16,7 @@
  * */
 namespace detail {
 	/**
-	 * @brief Find the maximum subarray that is guaranteed to cross the value of @ref mid.
+	 * @brief Find the maximum subarray that is guaranteed to cross the value of mid.
 	 * 
 	 * Since the goal is to find a crossing array, this algorithm starts in the middle and
 	 * extends out in each direction. At each new index, it computes the new total to determine

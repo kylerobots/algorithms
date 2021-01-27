@@ -94,8 +94,9 @@ namespace detail {
 	 * the LCS.
 	 * @param direction The table that stores directions.
 	 * @param string1 One of the strings, used to extract characters.
-	 * @param length1 The length of the substring solution for @ref string1.
+	 * @param length1 The length of the substring solution for string1.
 	 * @param length2 The length of the substring solution for the other string.
+	 * @return A string containing the longest common substring.
 	 * */
 	inline std::string printLCS(const Directions & direction, const std::string & string1, size_t length1, size_t length2) {
 		if (length1 == 0 || length2 == 0) {
