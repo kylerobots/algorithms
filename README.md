@@ -1,6 +1,10 @@
 # Algorithms #
 A collection of implementations from my Algorithms class. This is done to practice their implementation, since practice makes perfect. They all use Google Test's framework for unit testing.
 
+Full documentation is at https://kylerobots.github.io/algorithms/
+
+Source code can be found at https://github.com/kylerobots/algorithms
+
 ## Algorithm Overview ##
 There are a number of algorithms in this collection. Some are implemented as classes, some as functions, depending on
 the best fit. They all come from an introductory algorithms course. The current list includes:
